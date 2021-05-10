@@ -1,4 +1,7 @@
-all: doska
+all: compile
 
-doska: board.c
-	gcc -Wall -Werror board.c -o board
+compile: ignore
+	gcc -Wall -o ignore/Chess Chess.c
+
+ignore:
+	mkdir ignore
