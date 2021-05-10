@@ -2,9 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define RED     "\033[1;31m"
-#define YELLOW  "\033[1;33m"
-#define WHITE   "\033[1;37m"
+#define RED "" // "\033[1;31m"
+#define YELLOW "" //"\033[1;33m"
+#define WHITE  "" //"\033[1;37m"
 #define NONE 6
 enum {R,N,B,K,Q,P};
 enum {WH, BL};
