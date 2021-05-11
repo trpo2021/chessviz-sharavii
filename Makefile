@@ -1,6 +1,6 @@
-BO = bin/board.o
-MO = bin/main.o
-BRO = bin/board_read.o
+BO = obj/scr/board.o
+MO = obj/scr/main.o
+BRO = obj/scr/board_read.o
 CH = bin/Chess
 
 all: $(CH)
@@ -16,8 +16,8 @@ bin/main.o: scr/main.c
 bin/board_read.o:
 	gcc -Wall -Werror -o $(BRO) -c scr/board_read.c
 bin:
-	mkdir bin
+	mkdir obj
 .PHONY : clean
 clean:
 	rm -rf bin/
-	rm -rf build/*.ogi
+	rm -rf obj/*.o
