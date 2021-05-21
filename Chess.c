@@ -1,26 +1,26 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define RED "\033[1;31m"
 #define YELLOW "\033[1;33m"
-#define WHITE  "\033[1;37m"
+#define WHITE "\033[1;37m"
 #define NONE 6
-enum {R,N,B,K,Q,P};
-enum {WH, BL};
+enum { R, N, B, K, Q, P };
+enum { WH, BL };
 
 typedef struct {
-    char name: 4, col: 3;
+    char name : 4, col : 3;
     int moves;
 } Cells;
 typedef char binar;
 
 void print_board(Cells cell[]);
 void start_poz(Cells cell[]);
-binar decode(char* buf,unsigned int move_num, char* pos1, char* pos2);
-binar move(Cells* cell,char* pos1, char* pos2);
+binar decode(char* buf, unsigned int move_num, char* pos1, char* pos2);
+binar move(Cells* cell, char* pos1, char* pos2);
 binar pos_check(Cells* cell, const char* pos1, const char* pos2);
-binar p_check(Cells* cell,char pos1[],char pos2[]);
+binar p_check(Cells* cell, char pos1[], char pos2[]);
 
 int main()
 {
@@ -28,28 +28,35 @@ int main()
     char pos1[4] = {0}, pos2[4] = {0};
     char buf[12] = {0};
     unsigned int move_num = 0;
-   int i;
-//  printf ("\n%i\n",sizeof (cell[1]) );
-//  return 0;
+    int i;
+    //  printf ("\n%i\n",sizeof (cell[1]) );
+    //  return 0;
     start_poz(cell);
-    while (1){
+    while (1) {
         print_board(cell);
-        scanf("%s",buf);
-        while (!(buf[i] <= 'h' && buf[i] >= 'a')){
-            printf("%c",buf[i]);
+        scanf("%s", buf);
+        while (!(buf[i] <= 'h' && buf[i] >= 'a')) {
+            printf("%c", buf[i]);
             ++i;
         }
-        decode(buf,move_num,pos1,pos2);
-        move(cell,pos1,pos2);
-        printf("\t%c%c=%hhd %c%c=%hhd\n",pos1[0],pos1[1],pos1[2],pos2[0],pos2[1],pos2[2]);
+        decode(buf, move_num, pos1, pos2);
+        move(cell, pos1, pos2);
+        printf("\t%c%c=%hhd %c%c=%hhd\n",
+               pos1[0],
+               pos1[1],
+               pos1[2],
+               pos2[0],
+               pos2[1],
+               pos2[2]);
         system("clear");
     }
     return 0;
 }
 
-void start_poz(Cells cell[]) {
+void start_poz(Cells cell[])
+{
     int i;
-    for (i = 0; i <= 64 ; ++i) {
+    for (i = 0; i <= 64; ++i) {
         cell[i].name = NONE;
         cell[i].col = 3;
         cell[i].moves = 0;
@@ -96,19 +103,20 @@ void start_poz(Cells cell[]) {
     }
 }
 
-void print_board(Cells cell[]) {
-//  char simb = 0;
+void print_board(Cells cell[])
+{
+    //  char simb = 0;
     int i = 0, j = 0;
     printf("\n\n    _______________________________");
     for (i = 8; i >= 1; --i) {
         printf("\n   | ");
-        for (j = i; j < i + (8 * 7) + 1;j += 8) {
+        for (j = i; j < i + (8 * 7) + 1; j += 8) {
             switch (cell[j].col) {
             case WH:
-                printf("%s",YELLOW);
+                printf("%s", YELLOW);
                 break;
             case BL:
-                printf("%s",RED);
+                printf("%s", RED);
                 break;
             default:
                 break;
@@ -116,22 +124,22 @@ void print_board(Cells cell[]) {
             if (cell[j].col == WH) {
                 switch (cell[j].name) {
                 case R:
-                    printf("%c",'R');
+                    printf("%c", 'R');
                     break;
                 case N:
-                    printf("%c",'N');
+                    printf("%c", 'N');
                     break;
                 case B:
-                    printf("%c",'B');
+                    printf("%c", 'B');
                     break;
                 case Q:
-                    printf("%c",'Q');
+                    printf("%c", 'Q');
                     break;
                 case K:
-                    printf("%c",'K');
+                    printf("%c", 'K');
                     break;
                 case P:
-                    printf("%c",'P');
+                    printf("%c", 'P');
                     break;
                 default:
                     break;
@@ -140,22 +148,22 @@ void print_board(Cells cell[]) {
                 if (cell[j].col == BL) {
                     switch (cell[j].name) {
                     case R:
-                        printf("%c",'r');
+                        printf("%c", 'r');
                         break;
                     case N:
-                        printf("%c",'n');
+                        printf("%c", 'n');
                         break;
                     case B:
-                        printf("%c",'b');
+                        printf("%c", 'b');
                         break;
                     case Q:
-                        printf("%c",'q');
+                        printf("%c", 'q');
                         break;
                     case K:
-                        printf("%c",'k');
+                        printf("%c", 'k');
                         break;
                     case P:
-                        printf("%c",'p');
+                        printf("%c", 'p');
                         break;
                     default:
                         break;
@@ -169,47 +177,49 @@ void print_board(Cells cell[]) {
                 printf(" | ");
             }
         }
-        printf ("\033[0m |");
-        printf (" %d",i);
+        printf("\033[0m |");
+        printf(" %d", i);
     }
     printf("\n     A   B   C   D   E   F   G   H\n");
 }
 
-binar decode(char* buf,unsigned int move_num, char* pos1, char* pos2){
+binar decode(char* buf, unsigned int move_num, char* pos1, char* pos2)
+{
     unsigned int i = 0;
     move_num = 1;
-    for (; i<2; i++){
+    for (; i < 2; i++) {
         pos1[i] = buf[i];
     }
     i++;
-    for (;i<5 ; ++i){
-        pos2[i-3] = buf[i];
+    for (; i < 5; ++i) {
+        pos2[i - 3] = buf[i];
     }
-    pos1[2] = (pos1[0] - 'a')*8 + (pos1[1] - '0');
-    pos2[2] = (pos2[0] - 'a')*8 + (pos2[1] - '0');
-    if ((pos2[2] > 64) || (pos2[2] < 1)){
+    pos1[2] = (pos1[0] - 'a') * 8 + (pos1[1] - '0');
+    pos2[2] = (pos2[0] - 'a') * 8 + (pos2[1] - '0');
+    if ((pos2[2] > 64) || (pos2[2] < 1)) {
         pos2[2] = 0;
     }
-    if ((pos1[2] > 64) || (pos1[2] < 1)){
+    if ((pos1[2] > 64) || (pos1[2] < 1)) {
         pos1[2] = 0;
     }
-    if (pos1[2] == pos2[2]){
+    if (pos1[2] == pos2[2]) {
         pos1[2] = 66;
     }
     return 0;
 }
-binar move(Cells* cell,char* pos1, char* pos2){
-    if (pos1[2] == 66){
-        printf ("\nErr: %c%c = %c%c",pos1[0],pos1[1],pos2[0],pos2[1]);
+binar move(Cells* cell, char* pos1, char* pos2)
+{
+    if (pos1[2] == 66) {
+        printf("\nErr: %c%c = %c%c", pos1[0], pos1[1], pos2[0], pos2[1]);
     }
-    if ((pos1[2] == 0) || (pos2[2] == 0)){
-        printf ("\nHaven't this cell");
+    if ((pos1[2] == 0) || (pos2[2] == 0)) {
+        printf("\nHaven't this cell");
         return -1;
     }
-    if ( pos_check(cell,pos1,pos2)){
+    if (pos_check(cell, pos1, pos2)) {
         return -1;
     }
-    if (p_check(cell,pos1,pos2) == -1){
+    if (p_check(cell, pos1, pos2) == -1) {
         return -1;
     }
     cell[(int)pos2[2]].name = cell[(int)pos1[2]].name;
@@ -220,54 +230,57 @@ binar move(Cells* cell,char* pos1, char* pos2){
     cell[(int)pos1[2]].moves = 0;
     return 0;
 }
-binar pos_check(Cells* cell, const char* pos1, const char* pos2){
-//	printf ("\npos1 == ( %hu, %hu ) , pos2 == ( %hu, %hu )\n",cell[(int)pos1[2]].name,
-//	pos1[2], cell[(int)pos2[2]].name, pos2[2]);
-    if (cell[(int)pos1[2]].name != NONE &&
-        (cell[(int)pos2[2]].col != cell[(int)pos1[2]].col ||
-         cell[(int)pos1[2]].col == 3)){
+binar pos_check(Cells* cell, const char* pos1, const char* pos2)
+{
+    //	printf ("\npos1 == ( %hu, %hu ) , pos2 == ( %hu, %hu
+    //)\n",cell[(int)pos1[2]].name, 	pos1[2], cell[(int)pos2[2]].name,
+    // pos2[2]);
+    if (cell[(int)pos1[2]].name != NONE
+        && (cell[(int)pos2[2]].col != cell[(int)pos1[2]].col
+            || cell[(int)pos1[2]].col == 3)) {
         return 0;
     }
     return 1;
 }
 
-binar p_check(Cells* cell,char pos1[],char pos2[]){
-    if (cell[(int)pos1[2]].name != P){
+binar p_check(Cells* cell, char pos1[], char pos2[])
+{
+    if (cell[(int)pos1[2]].name != P) {
         return 2;
     }
-    int x[3] = {0},y[3] = {0};
+    int x[3] = {0}, y[3] = {0};
     int flag = 0;
-    x[1] = (pos1[2] - 1)/8;
-    y[1] = (pos1[2] - x[1]*8);
-    x[2] = (pos2[2] - 1)/8;
-    y[2] = (pos2[2] - x[2]*8);
-    if (cell[(int)pos1[2]].moves == 0){
+    x[1] = (pos1[2] - 1) / 8;
+    y[1] = (pos1[2] - x[1] * 8);
+    x[2] = (pos2[2] - 1) / 8;
+    y[2] = (pos2[2] - x[2] * 8);
+    if (cell[(int)pos1[2]].moves == 0) {
         flag = 1;
     }
-    if (cell[(int)pos1[2]].col == WH){
-        if ((x[1] == x[2]) && (y[2]-y[1] <= flag + 1) &&
-            (y[2]-y[1] > 0) && cell[(int)pos2[2]].name == NONE){
-            if ((flag == 1) && (y[2]-y[1] == 2)){
-                return cell[(int)pos2[2]-1].name == NONE ? 0:-1;
+    if (cell[(int)pos1[2]].col == WH) {
+        if ((x[1] == x[2]) && (y[2] - y[1] <= flag + 1) && (y[2] - y[1] > 0)
+            && cell[(int)pos2[2]].name == NONE) {
+            if ((flag == 1) && (y[2] - y[1] == 2)) {
+                return cell[(int)pos2[2] - 1].name == NONE ? 0 : -1;
             }
             return 0;
         }
-        if ((y[2]-y[1] == 1) && ((x[1]-x[2] == 1) || (x[1]-x[2] == -1)) &&
-            cell[(int)pos2[2]].col == BL){
+        if ((y[2] - y[1] == 1) && ((x[1] - x[2] == 1) || (x[1] - x[2] == -1))
+            && cell[(int)pos2[2]].col == BL) {
             return 0;
         }
         return -1;
     }
-    if (cell[(int)pos1[2]].col == BL){
-        if ((x[1] == x[2]) && (y[1]-y[2] <= flag + 1) &&
-            (y[1]-y[2] > 0) && cell[(int)pos2[2]].name == NONE){
-            if ((flag == 1) && (y[1]-y[2] == 2)){
-                return cell[(int)pos2[2]+1].name == NONE ? 0:-1;
+    if (cell[(int)pos1[2]].col == BL) {
+        if ((x[1] == x[2]) && (y[1] - y[2] <= flag + 1) && (y[1] - y[2] > 0)
+            && cell[(int)pos2[2]].name == NONE) {
+            if ((flag == 1) && (y[1] - y[2] == 2)) {
+                return cell[(int)pos2[2] + 1].name == NONE ? 0 : -1;
             }
             return 0;
         }
-        if ((y[1]-y[2] == 1) && ((x[1]-x[2] == 1) || (x[1]-x[2] == -1)) &&
-            cell[(int)pos2[2]].col == WH){
+        if ((y[1] - y[2] == 1) && ((x[1] - x[2] == 1) || (x[1] - x[2] == -1))
+            && cell[(int)pos2[2]].col == WH) {
             return 0;
         }
         return -1;
