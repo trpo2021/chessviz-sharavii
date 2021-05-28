@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define CTEST_MAIN
-#include <thirdparty/ctest.h>
+#include <ctest.h>
 #include "board.h"
 #include "board_read.h"
 
